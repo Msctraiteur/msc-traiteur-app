@@ -1091,7 +1091,7 @@
             </div>
 
             <div style="margin-top:14px">
-              <button class="btn" onclick="addEvent()">Créer l’événement</button>
+              <button class="btn" onclick="addEvent()">Créer l'événement</button>
             </div>
           </div>
         </div>
@@ -1206,7 +1206,65 @@
       `;
     }
 
-    
+    function renderSuppliers(){
+      return `
+        ${renderTopbar("Fournisseurs", "Base fournisseurs et contacts")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Fournisseurs</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Contact</th>
+                  <th>Téléphone</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  state.fournisseurs.length
+                  ? state.fournisseurs.map(f => `
+                      <tr>
+                        <td>${f.nom}</td>
+                        <td>${f.contact || "-"}</td>
+                        <td>${f.telephone || "-"}</td>
+                        <td>${f["e-mail"] || "-"}</td>
+                      </tr>
+                    `).join("")
+                  : `<tr><td colspan="4" class="empty">Aucun fournisseur.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>Ajouter un fournisseur</h3>
+            <div>
+              <label>Nom</label>
+              <input id="sup_nom">
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Contact</label>
+              <input id="sup_contact">
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Téléphone</label>
+              <input id="sup_tel">
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Email</label>
+              <input id="sup_email">
+            </div>
+
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addSupplier()">Ajouter</button>
+            </div>
+          </div>
+        </div>
       `;
     }
 
@@ -1223,70 +1281,7 @@
                   return `
                     <div class="alert-box">
                       <strong>${r.nom}</strong><br>
-                      <span class=function fournisseurs(){
-return `
-${afficherTopbar("Fournisseurs","Base fournisseurs et contacts")}
-
-<div class="grid">
-
-<div class="card">
-<h3>Fournisseurs</h3>
-
-
-</thead>
-
-<tbody>
-${
-Etat.fournisseurs.length
-? Etat.fournisseurs.map(f => `
-<tr>
-<td>${f.nom}</td>
-<td>${f.contact ?? "-"}</td>
-<td>${f.téléphone ?? "-"}</td>
-<td>${f["e-mail"] ?? "-"}</td>
-</tr>
-`).join("")
-: `<tr><td colspan="4" class="empty">Aucun fournisseur.</td></tr>`
-}
-</tbody>
-
-</table>
-</div>
-
-
-<div class="card">
-
-<h3>Ajouter un fournisseur</h3>
-
-<div>
-<label>Nom</label>
-<input id="sup_nom">
-</div>
-
-<div style="margin-top:12px">
-<label>Contact</label>
-<input id="sup_contact">
-</div>
-
-<div style="margin-top:12px">
-<label>Téléphone</label>
-<input id="sup_tel">
-</div>
-
-<div style="margin-top:12px">
-<label>Email</label>
-<input id="sup_email">
-</div>
-
-<button onclick="ajouterFournisseur()" style="margin-top:12px">
-Ajouter
-</button>
-
-</div>
-
-</div>
-`
-}"small muted">MSC Traiteur</span><br>
+                      <span class="small muted">MSC Traiteur</span><br>
                       <span class="small">Lot : ${String(r.id).toUpperCase()}</span><br>
                       <span class="small">DLC : à calculer</span><br>
                       <span class="small muted">Coût portion : ${euro(c.unit)}</span><br>
@@ -1399,13 +1394,20 @@ Ajouter
       const nom = document.getElementById("sup_nom").value.trim();
       const contact = document.getElementById("sup_contact").value.trim();
       const telephone = document.getElementById("sup_tel").value.trim();
+      const email = document.getElementById("sup_email").value.trim();
 
       if(!nom){
         alert("Nom fournisseur obligatoire");
         return;
       }
 
-      const res = await supabaseClient.from(TABLES.fournisseurs).insert([{ nom, contact, telephone }]);
+      const res = await supabaseClient.from(TABLES.fournisseurs).insert([{ 
+        nom, 
+        contact, 
+        telephone,
+        "e-mail": email
+      }]);
+      
       if(res.error){
         alert(res.error.message);
         return;
