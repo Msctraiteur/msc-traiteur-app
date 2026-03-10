@@ -7,109 +7,197 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root{
-      --bg:#f6f8fb;
-      --sidebar:#0f172a;
-      --sidebar-2:#111827;
+      --bg:#f4f7fb;
+      --sidebar:#07142f;
+      --sidebar2:#0b1b3d;
       --card:#ffffff;
       --line:#e5e7eb;
       --text:#111827;
       --muted:#64748b;
-      --primary:#2563eb;
-      --success:#16a34a;
-      --warn:#d97706;
-      --danger:#dc2626;
-      --soft:#dbeafe;
+      --primary:#1d4ed8;
+      --primary-soft:#dbeafe;
+      --success:#15803d;
+      --success-soft:#dcfce7;
+      --warn:#b45309;
+      --warn-soft:#ffedd5;
+      --danger:#b91c1c;
+      --danger-soft:#fee2e2;
       --shadow:0 10px 30px rgba(15,23,42,.08);
       --radius:18px;
     }
+
     *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      margin:0;
-      font-family:Inter,Arial,sans-serif;
+      font-family:Inter, Arial, sans-serif;
       background:var(--bg);
       color:var(--text);
     }
+
     .app{
       display:grid;
       grid-template-columns:260px 1fr;
       min-height:100vh;
     }
+
     .sidebar{
-      background:linear-gradient(180deg,var(--sidebar),var(--sidebar-2));
+      background:linear-gradient(180deg,var(--sidebar),var(--sidebar2));
       color:#fff;
-      padding:20px 16px;
+      padding:18px 14px;
       position:sticky;
       top:0;
       height:100vh;
       overflow:auto;
     }
+
     .brand{
       display:flex;
       gap:12px;
       align-items:center;
       margin-bottom:18px;
     }
-    .badge{
-      width:44px;height:44px;border-radius:14px;
-      background:rgba(255,255,255,.12);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;
-    }
-    .brand h1{margin:0;font-size:18px}
-    .brand p{margin:2px 0 0;font-size:12px;color:rgba(255,255,255,.7)}
-    .cloud{
-      background:rgba(16,185,129,.12);
-      border:1px solid rgba(16,185,129,.2);
-      color:#d1fae5;
-      padding:12px;
+
+    .brand-badge{
+      width:44px;
+      height:44px;
       border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,255,255,.12);
+      font-weight:800;
+      letter-spacing:.5px;
+      flex:0 0 auto;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      line-height:1.1;
+    }
+
+    .brand p{
+      margin:4px 0 0;
+      font-size:12px;
+      color:rgba(255,255,255,.74);
+    }
+
+    .cloud-status{
+      background:rgba(16,185,129,.12);
+      color:#d1fae5;
+      border:1px solid rgba(16,185,129,.2);
+      border-radius:14px;
+      padding:12px;
       font-size:12px;
       margin-bottom:16px;
+      line-height:1.4;
     }
+
     .nav button{
       width:100%;
       border:0;
       background:transparent;
       color:#fff;
-      padding:12px 14px;
       text-align:left;
+      padding:12px 14px;
       border-radius:14px;
       cursor:pointer;
       margin-bottom:6px;
       font-size:14px;
+      transition:.15s ease;
     }
-    .nav button.active,.nav button:hover{
+
+    .nav button:hover,
+    .nav button.active{
       background:rgba(255,255,255,.12);
     }
-    .content{padding:24px}
+
+    .content{
+      padding:24px;
+    }
+
     .topbar{
       display:flex;
-      justify-content:space-between;
       align-items:flex-start;
-      gap:12px;
+      justify-content:space-between;
+      gap:14px;
       flex-wrap:wrap;
       margin-bottom:20px;
     }
-    .topbar h2{margin:0;font-size:30px}
-    .topbar p{margin:6px 0 0;color:var(--muted)}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}
+
+    .topbar h2{
+      margin:0;
+      font-size:30px;
+      line-height:1.1;
+    }
+
+    .topbar p{
+      margin:8px 0 0;
+      color:var(--muted);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
     .btn{
+      appearance:none;
       border:0;
       background:var(--primary);
       color:#fff;
       padding:11px 14px;
       border-radius:12px;
-      font-weight:700;
       cursor:pointer;
+      font-weight:700;
+      font-size:14px;
     }
+
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
     .btn.secondary{
       background:#fff;
       color:var(--text);
       border:1px solid var(--line);
     }
-    .grid{display:grid;gap:16px}
-    .kpis{grid-template-columns:repeat(5,minmax(0,1fr))}
-    .two{grid-template-columns:1.2fr .8fr}
+
+    .btn.danger{
+      background:var(--danger);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .pill.blue{background:var(--primary-soft);color:var(--primary)}
+    .pill.green{background:var(--success-soft);color:var(--success)}
+    .pill.orange{background:var(--warn-soft);color:var(--warn)}
+    .pill.red{background:var(--danger-soft);color:var(--danger)}
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .kpis{
+      grid-template-columns:repeat(5,minmax(0,1fr));
+    }
+
+    .two{
+      grid-template-columns:1.2fr .8fr;
+    }
+
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -117,920 +205,1387 @@
       box-shadow:var(--shadow);
       padding:18px;
     }
-    .card h3{margin:0 0 6px}
-    .sub{color:var(--muted);font-size:13px}
-    .value{font-size:30px;font-weight:800;margin-top:8px}
-    .pill{
-      display:inline-block;
-      padding:5px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:700;
+
+    .card h3{
+      margin:0 0 6px;
+      font-size:22px;
     }
-    .pill.blue{background:#dbeafe;color:#1d4ed8}
-    .pill.green{background:#dcfce7;color:#15803d}
-    .pill.orange{background:#ffedd5;color:#c2410c}
-    .pill.red{background:#fee2e2;color:#b91c1c}
+
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .value{
+      font-size:30px;
+      font-weight:800;
+      margin-top:8px;
+    }
+
+    .kpi-title{
+      font-size:13px;
+      color:var(--muted);
+    }
+
     table{
       width:100%;
       border-collapse:collapse;
+      margin-top:10px;
     }
+
     th,td{
+      text-align:left;
       padding:11px 10px;
       border-bottom:1px solid var(--line);
-      text-align:left;
       vertical-align:top;
       font-size:14px;
     }
-    th{color:var(--muted);font-weight:700}
+
+    th{
+      color:var(--muted);
+      font-weight:700;
+    }
+
     input,select,textarea{
       width:100%;
-      padding:11px 12px;
       border:1px solid #d1d5db;
-      border-radius:12px;
       background:#fff;
+      border-radius:12px;
+      padding:11px 12px;
       font:inherit;
+      color:inherit;
     }
-    textarea{min-height:90px;resize:vertical}
+
+    textarea{
+      min-height:88px;
+      resize:vertical;
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      color:#334155;
+      margin-bottom:6px;
+      font-weight:600;
+    }
+
     .form-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
       gap:12px;
     }
-    .form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
+
+    .form-grid.three{
+      grid-template-columns:repeat(3,minmax(0,1fr));
     }
+
+    .section-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      margin-top:12px;
+    }
+
     .small{font-size:12px}
     .muted{color:var(--muted)}
-    .alert{
+
+    .alert-box{
       border:1px solid var(--line);
       border-radius:14px;
-      padding:12px;
-      margin-bottom:10px;
       background:#fff;
+      padding:12px;
+      margin-top:10px;
     }
-    .recipe-line,.menu-line{
+
+    .line-row{
       display:grid;
       grid-template-columns:1fr 130px auto;
       gap:10px;
       margin-bottom:10px;
     }
+
     .empty{
       color:var(--muted);
-      padding:12px 0;
+      padding:14px 0;
+      font-size:14px;
     }
+
     .footer-note{
       margin-top:10px;
-      font-size:12px;
       color:var(--muted);
+      font-size:12px;
     }
-    @media (max-width: 1100px){
+
+    .top-note{
+      margin-bottom:12px;
+      padding:12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:#334155;
+      font-size:13px;
+    }
+
+    .error-note{
+      background:#fff1f2;
+      border-color:#fecdd3;
+      color:#9f1239;
+    }
+
+    .success-note{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+      color:#166534;
+    }
+
+    .flex{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .right{
+      text-align:right;
+    }
+
+    .tag{
+      display:inline-block;
+      margin-top:6px;
+      margin-right:6px;
+      padding:4px 8px;
+      font-size:12px;
+      border-radius:999px;
+      background:#f1f5f9;
+      color:#334155;
+    }
+
+    @media (max-width:1100px){
       .app{grid-template-columns:1fr}
       .sidebar{height:auto;position:relative}
-      .kpis,.two,.form-grid,.form-grid.three,.recipe-line,.menu-line{grid-template-columns:1fr}
       .content{padding:16px}
+      .kpis,.two,.form-grid,.form-grid.three,.line-row{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="badge">MSC</div>
-      <div>
-        <h1>MSC Traiteur</h1>
-        <p>Version connectée Supabase</p>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">MSC</div>
+        <div>
+          <h1>MSC Traiteur</h1>
+          <p>Version connectée Supabase</p>
+        </div>
       </div>
-    </div>
 
-    <div class="cloud" id="cloudStatus">Connexion cloud en cours…</div>
+      <div class="cloud-status" id="cloudStatus">Connexion cloud en cours...</div>
 
-    <div class="nav">
-      <button class="active" data-tab="dashboard">📊 Dashboard</button>
-      <button data-tab="ingredients">🥕 Ingrédients</button>
-      <button data-tab="recipes">👨‍🍳 Recettes</button>
-      <button data-tab="menus">📚 Menus</button>
-      <button data-tab="events">🎉 Événements</button>
-      <button data-tab="production">🏭 Production</button>
-      <button data-tab="shopping">🛒 Courses</button>
-      <button data-tab="suppliers">🚚 Fournisseurs</button>
-      <button data-tab="labels">🏷️ Étiquettes</button>
-      <button data-tab="ddpp">📑 DDPP</button>
-    </div>
-  </aside>
+      <div class="nav">
+        <button class="active" data-tab="dashboard">📊 Dashboard</button>
+        <button data-tab="ingredients">🥕 Ingrédients</button>
+        <button data-tab="recipes">👨‍🍳 Recettes</button>
+        <button data-tab="menus">📚 Menus</button>
+        <button data-tab="events">🎉 Événements</button>
+        <button data-tab="production">🏭 Production</button>
+        <button data-tab="shopping">🛒 Courses</button>
+        <button data-tab="suppliers">🚚 Fournisseurs</button>
+        <button data-tab="labels">🏷️ Étiquettes</button>
+        <button data-tab="ddpp">📑 DDPP</button>
+      </div>
+    </aside>
 
-  <main class="content">
-    <div id="view"></div>
-  </main>
-</div>
+    <main class="content">
+      <div id="view"></div>
+    </main>
+  </div>
 
-<script>
-  const SUPABASE_URL = 'https://ritbgrnkmckudbfwhfkg.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_sCK7Lr2Z_hZr2Evb6ASzEg_jbAqqSqk';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <script>
+    const SUPABASE_URL = "https://ritbgrnkmckudbfwhfkg.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_sCK7Lr2Z_hZr2Evb6ASzEg_jbAqqSqk";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLEAUX = {
-clients:'clients',
-fournisseurs:'fournisseurs',
-ingredients:'ingredients',
-recettes:'recettes',
-recetteIngredients:'recette_ingredients',
-menus:'menus',
-prestations:'prestations',
-prestationsMenus:'prestations_menus',
-listeCours:'liste_cours'
-};
+    const TABLES = {
+      clients: "clients",
+      fournisseurs: "fournisseurs",
+      ingredients: "ingredients",
+      recettes: "recettes",
+      recetteIngredients: "recette_ingredients",
+      menus: "menus",
+      prestations: "prestations",
+      prestationsMenus: "prestations_menus",
+      listeCours: "liste_cours",
+      production: "production"
+    };
 
-  const state = {
-    tab: 'dashboard',
-    loading: false,
-    syncMessage: '',
-    clients: [],
-    fournisseurs: [],
-    ingredients: [],
-    recettes: [],
-    recetteIngredients: [],
-    menus: [],
-    prestations: [],
-    prestationsMenus: []
-  };
+    const state = {
+      tab: "dashboard",
+      loading: false,
+      syncMessage: "Connexion cloud en cours...",
+      error: "",
+      clients: [],
+      fournisseurs: [],
+      ingredients: [],
+      recettes: [],
+      recetteIngredients: [],
+      menus: [],
+      prestations: [],
+      prestationsMenus: [],
+      production: []
+    };
 
-  const newData = {
-    ingredient: { nom:'', unite:'kg', stock:0, min_stock:0, prix_unitaire:0, fournisseur:'', allergene:'' },
-    fournisseur: { nom:'', contact:'', telephone:'' },
-    recette: { nom:'', categorie:'Plat', description:'', portions:10 },
-    recetteLignes: [],
-    menu: { nom:'', prix:0, recipeId:'' },
-    prestation: { title:'', clientLabel:'', date_evenement:'2026-06-20', lieu:'', nb_personnes:50, statut:'Préparation', menuId:'' }
-  };
-
-  function euro(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(Number(n||0)); }
-  function fmt(n,d=2){ return Number(n||0).toFixed(d); }
-  function byId(arr,id){ return arr.find(x=>String(x.id)===String(id)); }
-
-  async function loadAll(){
-    state.loading = true;
-    setCloud('Synchronisation Supabase en cours…');
-    try{
-      const [clients, fournisseurs, ingredients, recettes, recetteIngredients, menus, prestations, prestationsMenus] = await Promise.all([
-        supabase.from(TABLES.clients).select('*').order('id'),
-        supabase.from(TABLES.fournisseurs).select('*').order('id'),
-        supabase.from(TABLES.ingredients).select('*').order('id'),
-        supabase.from(TABLES.recettes).select('*').order('id'),
-        supabase.from(TABLES.recetteIngredients).select('*').order('id'),
-        supabase.from(TABLES.menus).select('*').order('id'),
-        supabase.from(TABLES.prestations).select('*').order('id'),
-        supabase.from(TABLES.prestationsMenus).select('*').order('id')
-      ]);
-
-      for (const r of [clients,fournisseurs,ingredients,recettes,recetteIngredients,menus,prestations,prestationsMenus]){
-        if(r.error) throw r.error;
+    const forms = {
+      ingredient: {
+        nom: "",
+        unite: "kg",
+        stock: 0,
+        min_stock: 0,
+        prix_unitaire: 0,
+        fournisseur: "",
+        allergene: ""
+      },
+      fournisseur: {
+        nom: "",
+        contact: "",
+        telephone: ""
+      },
+      recette: {
+        nom: "",
+        categorie: "Plat",
+        description: "",
+        portions: 10
+      },
+      recetteLignes: [],
+      menu: {
+        nom: "",
+        prix: 0,
+        recipeId: ""
+      },
+      prestation: {
+        title: "",
+        clientLabel: "",
+        date_evenement: "2026-06-20",
+        lieu: "",
+        nb_personnes: 50,
+        statut: "Préparation",
+        menuId: ""
       }
+    };
 
-      state.clients = clients.data || [];
-      state.fournisseurs = fournisseurs.data || [];
-      state.ingredients = ingredients.data || [];
-      state.recettes = recettes.data || [];
-      state.recetteIngredients = recetteIngredients.data || [];
-      state.menus = menus.data || [];
-      state.prestations = prestations.data || [];
-      state.prestationsMenus = prestationsMenus.data || [];
-
-      setCloud('Base cloud active et synchronisée.');
-      render();
-    }catch(err){
-      console.error(err);
-      setCloud('Erreur Supabase. Vérifie les noms de tables si une table ne remonte pas.');
-    }finally{
-      state.loading = false;
+    function byId(arr, id){
+      return arr.find(x => String(x.id) === String(id));
     }
-  }
 
-  function setCloud(msg){
-    state.syncMessage = msg;
-    const el = document.getElementById('cloudStatus');
-    if(el) el.textContent = msg;
-  }
+    function euro(n){
+      return new Intl.NumberFormat("fr-FR", {
+        style: "currency",
+        currency: "EUR"
+      }).format(Number(n || 0));
+    }
 
-  function recipeCost(recipe){
-    const lines = state.recetteIngredients.filter(x => String(x.recette_id) === String(recipe.id));
-    const total = lines.reduce((sum,line)=>{
-      const ing = byId(state.ingredients, line.ingredient_id);
-      return sum + Number(ing?.prix_unitaire || 0) * Number(line.quantite || 0);
-    },0);
-    const unit = Number(recipe.portions||0) > 0 ? total / Number(recipe.portions) : 0;
-    const allergens = [...new Set(lines.map(line => byId(state.ingredients, line.ingredient_id)?.allergene).filter(Boolean))];
-    return { total, unit, allergens };
-  }
+    function fmt(n, digits = 2){
+      return Number(n || 0).toFixed(digits);
+    }
 
-  function linkedMenusForPrestation(prestationId){
-    return state.prestationsMenus.filter(x => String(x.prestation_id) === String(prestationId));
-  }
+    function setCloud(msg, isError = false){
+      state.syncMessage = msg;
+      state.error = isError ? msg : "";
+      const el = document.getElementById("cloudStatus");
+      if(el) el.textContent = msg;
+    }
 
-  function menuRecipes(menu){
-    // Ici on stocke la recette principale du menu dans description.
-    const rec = state.recettes.find(r => r.nom === menu.description);
-    return rec ? [{ recipe: rec, portionsPerGuest: 1 }] : [];
-  }
+    function refreshNav(){
+      document.querySelectorAll(".nav button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === state.tab);
+      });
+    }
 
-  function eventProduction(event){
-    const links = linkedMenusForPrestation(event.id);
-    const recipeNeeds = [];
-    const ingredientMap = new Map();
+    async function safeSelect(tableName){
+      const result = await supabase.from(tableName).select("*").order("id", { ascending: true });
+      if(result.error) throw new Error(`Table "${tableName}" : ${result.error.message}`);
+      return result.data || [];
+    }
 
-    links.forEach(link=>{
-      const menu = byId(state.menus, link.menu_id);
-      if(!menu) return;
+    async function loadAll(){
+      state.loading = true;
+      setCloud("Connexion cloud en cours...");
+      try{
+        const [
+          clients,
+          fournisseurs,
+          ingredients,
+          recettes,
+          recetteIngredients,
+          menus,
+          prestations,
+          prestationsMenus,
+          production
+        ] = await Promise.all([
+          safeSelect(TABLES.clients),
+          safeSelect(TABLES.fournisseurs),
+          safeSelect(TABLES.ingredients),
+          safeSelect(TABLES.recettes),
+          safeSelect(TABLES.recetteIngredients),
+          safeSelect(TABLES.menus),
+          safeSelect(TABLES.prestations),
+          safeSelect(TABLES.prestationsMenus),
+          safeSelect(TABLES.production)
+        ]);
 
-      menuRecipes(menu).forEach(item=>{
-        const recipe = item.recipe;
-        const portions = Number(event.nb_personnes || 0) * Number(item.portionsPerGuest || 1);
-        recipeNeeds.push({ recipe, portions });
+        state.clients = clients;
+        state.fournisseurs = fournisseurs;
+        state.ingredients = ingredients;
+        state.recettes = recettes;
+        state.recetteIngredients = recetteIngredients;
+        state.menus = menus;
+        state.prestations = prestations;
+        state.prestationsMenus = prestationsMenus;
+        state.production = production;
 
-        const factor = Number(recipe.portions || 1) > 0 ? portions / Number(recipe.portions || 1) : 0;
-        const lines = state.recetteIngredients.filter(x => String(x.recette_id) === String(recipe.id));
-        lines.forEach(line=>{
-          const ing = byId(state.ingredients, line.ingredient_id);
-          if(!ing) return;
-          const prev = ingredientMap.get(String(ing.id)) || { ingredient: ing, needed: 0 };
-          prev.needed += Number(line.quantite || 0) * factor;
-          ingredientMap.set(String(ing.id), prev);
+        setCloud("Base cloud active et synchronisée.");
+      }catch(err){
+        console.error(err);
+        setCloud(`Erreur Supabase : ${err.message}`, true);
+      }finally{
+        state.loading = false;
+        render();
+      }
+    }
+
+    function clientName(clientId){
+      return byId(state.clients, clientId)?.nom || "Client";
+    }
+
+    function linkedMenusForPrestation(prestationId){
+      return state.prestationsMenus.filter(x => String(x.prestation_id) === String(prestationId));
+    }
+
+    function menuRecipes(menu){
+      const recipe = state.recettes.find(r => r.nom === menu.description);
+      if(!recipe) return [];
+      return [{ recipe, portionsPerGuest: 1 }];
+    }
+
+    function recipeLines(recipeId){
+      return state.recetteIngredients.filter(x => String(x.recette_id) === String(recipeId));
+    }
+
+    function recipeCost(recipe){
+      const lines = recipeLines(recipe.id);
+      const total = lines.reduce((sum, line) => {
+        const ing = byId(state.ingredients, line.ingredient_id);
+        return sum + (Number(ing?.prix_unitaire || 0) * Number(line.quantite || 0));
+      }, 0);
+
+      const unit = Number(recipe.portions || 0) > 0 ? total / Number(recipe.portions || 0) : 0;
+      const allergens = [...new Set(
+        lines
+          .map(line => byId(state.ingredients, line.ingredient_id)?.allergene)
+          .filter(Boolean)
+      )];
+
+      return { total, unit, allergens };
+    }
+
+    function eventProduction(event){
+      const links = linkedMenusForPrestation(event.id);
+      const recipeNeeds = [];
+      const ingredientMap = new Map();
+
+      links.forEach(link => {
+        const menu = byId(state.menus, link.menu_id);
+        if(!menu) return;
+
+        const mRecipes = menuRecipes(menu);
+        mRecipes.forEach(item => {
+          const recipe = item.recipe;
+          const portions = Number(event.nb_personnes || 0) * Number(item.portionsPerGuest || 1);
+          recipeNeeds.push({ recipe, portions });
+
+          const factor = Number(recipe.portions || 1) > 0
+            ? portions / Number(recipe.portions || 1)
+            : 0;
+
+          const lines = recipeLines(recipe.id);
+          lines.forEach(line => {
+            const ing = byId(state.ingredients, line.ingredient_id);
+            if(!ing) return;
+
+            const key = String(ing.id);
+            const current = ingredientMap.get(key) || {
+              ingredient: ing,
+              needed: 0
+            };
+            current.needed += Number(line.quantite || 0) * factor;
+            ingredientMap.set(key, current);
+          });
         });
       });
-    });
 
-    const ingredientNeeds = Array.from(ingredientMap.values()).map(row => ({
-      ...row,
-      toBuy: Math.max(row.needed - Number(row.ingredient.stock || 0), 0)
-    }));
+      const ingredientNeeds = Array.from(ingredientMap.values()).map(row => ({
+        ...row,
+        toBuy: Math.max(row.needed - Number(row.ingredient.stock || 0), 0),
+        supplier: row.ingredient.fournisseur || "-"
+      }));
 
-    return { recipeNeeds, ingredientNeeds };
-  }
+      return { recipeNeeds, ingredientNeeds };
+    }
 
-  function globalShopping(){
-    const map = new Map();
-    state.prestations.forEach(event=>{
-      const prod = eventProduction(event);
-      prod.ingredientNeeds.forEach(row=>{
-        const key = String(row.ingredient.id);
-        const prev = map.get(key) || { ingredient: row.ingredient, needed: 0 };
-        prev.needed += row.needed;
-        map.set(key, prev);
+    function globalShopping(){
+      const map = new Map();
+
+      state.prestations.forEach(event => {
+        const prod = eventProduction(event);
+        prod.ingredientNeeds.forEach(row => {
+          const key = String(row.ingredient.id);
+          const current = map.get(key) || {
+            ingredient: row.ingredient,
+            needed: 0,
+            supplier: row.ingredient.fournisseur || "-"
+          };
+          current.needed += row.needed;
+          map.set(key, current);
+        });
       });
-    });
-    return Array.from(map.values()).map(row => ({
-      ...row,
-      toBuy: Math.max(row.needed - Number(row.ingredient.stock || 0), 0)
-    }));
-  }
 
-  function stockAlerts(){
-    return state.ingredients.filter(i => Number(i.stock || 0) <= Number(i.min_stock || 0));
-  }
+      return Array.from(map.values()).map(row => ({
+        ...row,
+        toBuy: Math.max(row.needed - Number(row.ingredient.stock || 0), 0)
+      }));
+    }
 
-  function clientName(clientId){
-    return byId(state.clients, clientId)?.nom || 'Client';
-  }
+    function stockAlerts(){
+      return state.ingredients.filter(i => Number(i.stock || 0) <= Number(i.min_stock || 0));
+    }
 
-  function refreshNav(){
-    document.querySelectorAll('.nav button').forEach(btn=>{
-      btn.classList.toggle('active', btn.dataset.tab === state.tab);
-    });
-  }
-
-  function renderDashboard(){
-    const alerts = stockAlerts();
-    return `
-      <div class="topbar">
-        <div>
-          <h2>MSC Traiteur OS</h2>
-          <p>Version complète : événements, production automatique, stock intelligent.</p>
-        </div>
-        <div class="actions">
-          <button class="btn secondary" onclick="loadAll()">Rafraîchir</button>
-          <span class="pill green">Supabase connecté</span>
-        </div>
-      </div>
-
-      <div class="grid kpis">
-        <div class="card"><div class="sub">Ingrédients</div><div class="value">${state.ingredients.length}</div></div>
-        <div class="card"><div class="sub">Recettes</div><div class="value">${state.recettes.length}</div></div>
-        <div class="card"><div class="sub">Menus</div><div class="value">${state.menus.length}</div></div>
-        <div class="card"><div class="sub">Événements</div><div class="value">${state.prestations.length}</div></div>
-        <div class="card"><div class="sub">Alertes stock</div><div class="value">${alerts.length}</div></div>
-      </div>
-
-      <div class="grid two" style="margin-top:16px">
-        <div class="card">
-          <h3>Événements</h3>
-          <div class="sub">Mariages, hôtels, entreprises</div>
-          <table style="margin-top:10px">
-            <thead><tr><th>Événement</th><th>Date</th><th>Convives</th><th>Menu</th></tr></thead>
-            <tbody>
-              ${state.prestations.map(e=>{
-                const menuLink = linkedMenusForPrestation(e.id)[0];
-                const menu = menuLink ? byId(state.menus, menuLink.menu_id) : null;
-                return `
-                  <tr>
-                    <td><strong>${e.title || 'Événement'}</strong><div class="small muted">${clientName(e.client_id)} · ${e.lieu || ''}</div></td>
-                    <td>${e.date_evenement || ''}</td>
-                    <td>${e.nb_personnes || 0}</td>
-                    <td>${menu?.nom || '-'}</td>
-                  </tr>`;
-              }).join('') || `<tr><td colspan="4" class="empty">Aucun événement.</td></tr>`}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card">
-          <h3>Stock intelligent</h3>
-          <div class="sub">Produits à réapprovisionner</div>
-          <div style="margin-top:12px">
-            ${alerts.length ? alerts.map(ing=>`
-              <div class="alert">
-                <strong>${ing.nom}</strong><br>
-                <span class="small muted">Stock ${fmt(ing.stock)} ${ing.unite || ''} · seuil ${fmt(ing.min_stock)} ${ing.unite || ''}</span>
-              </div>
-            `).join('') : `<div class="empty">Aucune alerte.</div>`}
+    function renderTopbar(title, subtitle){
+      return `
+        <div class="topbar">
+          <div>
+            <h2>${title}</h2>
+            <p>${subtitle}</p>
+          </div>
+          <div class="actions">
+            <button class="btn secondary" onclick="loadAll()">Rafraîchir</button>
+            <span class="pill green">Supabase connecté</span>
           </div>
         </div>
-      </div>
-    `;
-  }
+      `;
+    }
 
-  function renderIngredients(){
-    return `
-      <div class="topbar"><div><h2>Ingrédients</h2><p>Stocks, coûts, fournisseurs, allergènes</p></div></div>
-      <div class="grid two">
-        <div class="card">
-          <h3>Base ingrédients</h3>
-          <table>
-            <thead><tr><th>Nom</th><th>Stock</th><th>Coût</th><th>Fournisseur</th></tr></thead>
-            <tbody>
-              ${state.ingredients.map(i=>`
-                <tr>
-                  <td><strong>${i.nom}</strong><div class="small muted">${i.allergene || 'Sans allergène déclaré'}</div></td>
-                  <td>${fmt(i.stock)} ${i.unite || ''}</td>
-                  <td>${euro(i.prix_unitaire)}</td>
-                  <td>${i.fournisseur || '-'}</td>
-                </tr>
-              `).join('') || `<tr><td colspan="4" class="empty">Aucun ingrédient.</td></tr>`}
-            </tbody>
-          </table>
+    function renderDashboard(){
+      const alerts = stockAlerts();
+      return `
+        ${renderTopbar("MSC Traiteur OS", "Dashboard général de production, stock et événements")}
+        <div class="grid kpis">
+          <div class="card">
+            <div class="kpi-title">Ingrédients</div>
+            <div class="value">${state.ingredients.length}</div>
+          </div>
+          <div class="card">
+            <div class="kpi-title">Recettes</div>
+            <div class="value">${state.recettes.length}</div>
+          </div>
+          <div class="card">
+            <div class="kpi-title">Menus</div>
+            <div class="value">${state.menus.length}</div>
+          </div>
+          <div class="card">
+            <div class="kpi-title">Événements</div>
+            <div class="value">${state.prestations.length}</div>
+          </div>
+          <div class="card">
+            <div class="kpi-title">Alertes stock</div>
+            <div class="value">${alerts.length}</div>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Ajouter un ingrédient</h3>
-          <div class="form-grid">
-            <div>
-              <label>Nom</label>
-              <input id="ing_nom" />
+        <div class="grid two" style="margin-top:16px">
+          <div class="card">
+            <h3>Événements à venir</h3>
+            <div class="sub">Mariages, hôtels, entreprises</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Événement</th>
+                  <th>Date</th>
+                  <th>Convives</th>
+                  <th>Menu</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  state.prestations.length
+                  ? state.prestations.map(e => {
+                      const menuLink = linkedMenusForPrestation(e.id)[0];
+                      const menu = menuLink ? byId(state.menus, menuLink.menu_id) : null;
+                      return `
+                        <tr>
+                          <td>
+                            <strong>${e.title || "Événement"}</strong>
+                            <div class="small muted">${clientName(e.client_id)} · ${e.lieu || ""}</div>
+                          </td>
+                          <td>${e.date_evenement || ""}</td>
+                          <td>${e.nb_personnes || 0}</td>
+                          <td>${menu?.nom || "-"}</td>
+                        </tr>
+                      `;
+                    }).join("")
+                  : `<tr><td colspan="4" class="empty">Aucun événement.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>Stock intelligent</h3>
+            <div class="sub">Produits à réapprovisionner</div>
+            ${
+              alerts.length
+                ? alerts.map(ing => `
+                    <div class="alert-box">
+                      <strong>${ing.nom}</strong><br>
+                      <span class="small muted">
+                        Stock ${fmt(ing.stock)} ${ing.unite || ""} · seuil ${fmt(ing.min_stock)} ${ing.unite || ""}
+                      </span>
+                    </div>
+                  `).join("")
+                : `<div class="empty">Aucune alerte stock.</div>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function renderIngredients(){
+      return `
+        ${renderTopbar("Ingrédients", "Gestion des stocks, coûts, fournisseurs et allergènes")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Base ingrédients</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Stock</th>
+                  <th>Coût</th>
+                  <th>Fournisseur</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  state.ingredients.length
+                  ? state.ingredients.map(i => `
+                      <tr>
+                        <td>
+                          <strong>${i.nom}</strong>
+                          <div class="small muted">${i.allergene || "Sans allergène déclaré"}</div>
+                        </td>
+                        <td>${fmt(i.stock)} ${i.unite || ""}</td>
+                        <td>${euro(i.prix_unitaire)}</td>
+                        <td>${i.fournisseur || "-"}</td>
+                      </tr>
+                    `).join("")
+                  : `<tr><td colspan="4" class="empty">Aucun ingrédient.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>Ajouter un ingrédient</h3>
+            <div class="form-grid">
+              <div>
+                <label>Nom</label>
+                <input id="ing_nom">
+              </div>
+              <div>
+                <label>Unité</label>
+                <select id="ing_unite">
+                  <option value="kg">kg</option>
+                  <option value="g">g</option>
+                  <option value="L">L</option>
+                  <option value="piece">pièce</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label>Unité</label>
-              <select id="ing_unite">
-                <option value="kg">kg</option>
-                <option value="g">g</option>
-                <option value="L">L</option>
-                <option value="piece">pièce</option>
+
+            <div class="form-grid three" style="margin-top:12px">
+              <div>
+                <label>Stock</label>
+                <input id="ing_stock" type="number" value="0">
+              </div>
+              <div>
+                <label>Seuil mini</label>
+                <input id="ing_min_stock" type="number" value="0">
+              </div>
+              <div>
+                <label>Prix unitaire</label>
+                <input id="ing_prix" type="number" value="0">
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Fournisseur</label>
+              <select id="ing_fournisseur">
+                <option value="">Choisir</option>
+                ${state.fournisseurs.map(f => `<option value="${f.nom}">${f.nom}</option>`).join("")}
               </select>
             </div>
-          </div>
-          <div class="form-grid three" style="margin-top:12px">
-            <div><label>Stock</label><input id="ing_stock" type="number" value="0" /></div>
-            <div><label>Seuil mini</label><input id="ing_min" type="number" value="0" /></div>
-            <div><label>Coût unité</label><input id="ing_prix" type="number" value="0" /></div>
-          </div>
-          <div style="margin-top:12px">
-            <label>Fournisseur</label>
-            <select id="ing_fournisseur">
-              <option value="">Choisir</option>
-              ${state.fournisseurs.map(f=>`<option value="${f.nom}">${f.nom}</option>`).join('')}
-            </select>
-          </div>
-          <div style="margin-top:12px">
-            <label>Allergène</label>
-            <input id="ing_allergene" />
-          </div>
-          <div style="margin-top:14px">
-            <button class="btn" onclick="addIngredient()">Ajouter</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
 
-  function renderRecipes(){
-    return `
-      <div class="topbar"><div><h2>Recettes</h2><p>Coût matière et rendement</p></div></div>
-      <div class="grid two">
-        <div class="card">
-          <h3>Base recettes</h3>
-          <table>
-            <thead><tr><th>Nom</th><th>Catégorie</th><th>Rendement</th><th>Coût / portion</th></tr></thead>
-            <tbody>
-              ${state.recettes.map(r=>{
-                const cost = recipeCost(r);
-                return `
-                  <tr>
-                    <td><strong>${r.nom}</strong><div class="small muted">${r.description || ''}</div></td>
-                    <td>${r.categorie || ''}</td>
-                    <td>${r.portions || 0}</td>
-                    <td>${euro(cost.unit)}</td>
-                  </tr>`;
-              }).join('') || `<tr><td colspan="4" class="empty">Aucune recette.</td></tr>`}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card">
-          <h3>Créer une recette</h3>
-          <div>
-            <label>Nom</label>
-            <input id="rec_nom" />
-          </div>
-          <div class="form-grid" style="margin-top:12px">
-            <div>
-              <label>Catégorie</label>
-              <input id="rec_cat" value="Plat" />
+            <div style="margin-top:12px">
+              <label>Allergène</label>
+              <input id="ing_allergene">
             </div>
-            <div>
-              <label>Rendement base</label>
-              <input id="rec_portions" type="number" value="10" />
+
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addIngredient()">Ajouter</button>
             </div>
           </div>
-          <div style="margin-top:12px">
-            <label>Description / procédé</label>
-            <textarea id="rec_desc"></textarea>
-          </div>
-
-          <div class="section-title" style="margin-top:14px">
-            <strong>Ingrédients de la recette</strong>
-            <button class="btn secondary" onclick="addRecipeLineForm()">Ajouter une ligne</button>
-          </div>
-
-          <div id="recipeLines"></div>
-
-          <div style="margin-top:14px">
-            <button class="btn" onclick="addRecipe()">Créer la recette</button>
-          </div>
         </div>
-      </div>
-    `;
-  }
+      `;
+    }
 
-  function renderRecipeLines(){
-    const target = document.getElementById('recipeLines');
-    if(!target) return;
-    target.innerHTML = newData.recetteLignes.map((line,idx)=>`
-      <div class="recipe-line">
-        <select onchange="updateRecipeLine(${idx}, 'ingredient_id', this.value)">
-          ${state.ingredients.map(i=>`<option value="${i.id}" ${String(i.id)===String(line.ingredient_id)?'selected':''}>${i.nom}</option>`).join('')}
-        </select>
-        <input type="number" value="${line.quantite}" onchange="updateRecipeLine(${idx}, 'quantite', this.value)" />
-        <button class="btn secondary" onclick="removeRecipeLine(${idx})">Suppr.</button>
-      </div>
-    `).join('') || `<div class="empty">Ajoute une ligne d'ingrédient.</div>`;
-  }
-
-  function renderMenus(){
-    return `
-      <div class="topbar"><div><h2>Menus</h2><p>Assemblage de recettes</p></div></div>
-      <div class="grid two">
-        <div class="card">
-          <h3>Menus</h3>
-          <table>
-            <thead><tr><th>Nom</th><th>Recette liée</th><th>Prix</th></tr></thead>
-            <tbody>
-              ${state.menus.map(m=>`
+    function renderRecipes(){
+      return `
+        ${renderTopbar("Recettes", "Gestion des recettes, ingrédients, coût matière et rendement")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Recettes existantes</h3>
+            <table>
+              <thead>
                 <tr>
-                  <td><strong>${m.nom}</strong></td>
-                  <td>${m.description || '-'}</td>
-                  <td>${euro(m.prix)}</td>
+                  <th>Nom</th>
+                  <th>Catégorie</th>
+                  <th>Rendement</th>
+                  <th>Coût / portion</th>
                 </tr>
-              `).join('') || `<tr><td colspan="3" class="empty">Aucun menu.</td></tr>`}
-            </tbody>
-          </table>
-          <div class="footer-note">Dans cette version, la recette principale du menu est stockée dans le champ description du menu.</div>
-        </div>
+              </thead>
+              <tbody>
+                ${
+                  state.recettes.length
+                  ? state.recettes.map(r => {
+                      const c = recipeCost(r);
+                      return `
+                        <tr>
+                          <td>
+                            <strong>${r.nom}</strong>
+                            <div class="small muted">${r.description || ""}</div>
+                          </td>
+                          <td>${r.categorie || ""}</td>
+                          <td>${r.portions || 0}</td>
+                          <td>${euro(c.unit)}</td>
+                        </tr>
+                      `;
+                    }).join("")
+                  : `<tr><td colspan="4" class="empty">Aucune recette.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
 
-        <div class="card">
-          <h3>Créer un menu</h3>
-          <div>
-            <label>Nom du menu</label>
-            <input id="menu_nom" />
-          </div>
-          <div style="margin-top:12px">
-            <label>Recette principale</label>
-            <select id="menu_recipe">
-              <option value="">Choisir</option>
-              ${state.recettes.map(r=>`<option value="${r.id}">${r.nom}</option>`).join('')}
-            </select>
-          </div>
-          <div style="margin-top:12px">
-            <label>Prix du menu</label>
-            <input id="menu_prix" type="number" value="0" />
-          </div>
-          <div style="margin-top:14px">
-            <button class="btn" onclick="addMenu()">Créer le menu</button>
+          <div class="card">
+            <h3>Créer une recette</h3>
+
+            <div>
+              <label>Nom</label>
+              <input id="rec_nom">
+            </div>
+
+            <div class="form-grid" style="margin-top:12px">
+              <div>
+                <label>Catégorie</label>
+                <input id="rec_categorie" value="Plat">
+              </div>
+              <div>
+                <label>Portions de base</label>
+                <input id="rec_portions" type="number" value="10">
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Procédé / description</label>
+              <textarea id="rec_description"></textarea>
+            </div>
+
+            <div class="section-row">
+              <strong>Composition</strong>
+              <button class="btn secondary" onclick="addRecipeLineForm()">Ajouter une ligne</button>
+            </div>
+
+            <div id="recipeLines"></div>
+
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addRecipe()">Créer la recette</button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
-  }
+      `;
+    }
 
-  function renderEvents(){
-    return `
-      <div class="topbar"><div><h2>Événements</h2><p>Mariages, hôtels, entreprises</p></div></div>
-      <div class="grid two">
-        <div class="card">
-          <h3>Événements</h3>
-          <table>
-            <thead><tr><th>Titre</th><th>Date</th><th>Convives</th><th>Menu</th></tr></thead>
-            <tbody>
-              ${state.prestations.map(e=>{
-                const menuLink = linkedMenusForPrestation(e.id)[0];
-                const menu = menuLink ? byId(state.menus, menuLink.menu_id) : null;
+    function renderRecipeLines(){
+      const zone = document.getElementById("recipeLines");
+      if(!zone) return;
+
+      zone.innerHTML = forms.recetteLignes.length
+        ? forms.recetteLignes.map((line, index) => `
+            <div class="line-row">
+              <select onchange="updateRecipeLine(${index}, 'ingredient_id', this.value)">
+                ${state.ingredients.map(i => `
+                  <option value="${i.id}" ${String(i.id) === String(line.ingredient_id) ? "selected" : ""}>
+                    ${i.nom}
+                  </option>
+                `).join("")}
+              </select>
+              <input type="number" value="${line.quantite}" onchange="updateRecipeLine(${index}, 'quantite', this.value)">
+              <button class="btn secondary" onclick="removeRecipeLine(${index})">Suppr.</button>
+            </div>
+          `).join("")
+        : `<div class="empty">Ajoute une ligne d'ingrédient.</div>`;
+    }
+
+    function renderMenus(){
+      return `
+        ${renderTopbar("Menus", "Assemblage de recettes en menus de prestation")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Menus existants</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Recette liée</th>
+                  <th>Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  state.menus.length
+                  ? state.menus.map(m => `
+                      <tr>
+                        <td><strong>${m.nom}</strong></td>
+                        <td>${m.description || "-"}</td>
+                        <td>${euro(m.prix)}</td>
+                      </tr>
+                    `).join("")
+                  : `<tr><td colspan="3" class="empty">Aucun menu.</td></tr>`
+                }
+              </tbody>
+            </table>
+            <div class="footer-note">
+              Dans cette version, la recette principale du menu est stockée dans la description du menu.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Créer un menu</h3>
+            <div>
+              <label>Nom du menu</label>
+              <input id="menu_nom">
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Recette principale</label>
+              <select id="menu_recipe">
+                <option value="">Choisir</option>
+                ${state.recettes.map(r => `<option value="${r.id}">${r.nom}</option>`).join("")}
+              </select>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Prix du menu</label>
+              <input id="menu_prix" type="number" value="0">
+            </div>
+
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addMenu()">Créer le menu</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEvents(){
+      return `
+        ${renderTopbar("Événements", "Mariages, hôtels, entreprises, prestations")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Événements</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Titre</th>
+                  <th>Date</th>
+                  <th>Convives</th>
+                  <th>Menu</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  state.prestations.length
+                  ? state.prestations.map(e => {
+                      const menuLink = linkedMenusForPrestation(e.id)[0];
+                      const menu = menuLink ? byId(state.menus, menuLink.menu_id) : null;
+                      return `
+                        <tr>
+                          <td>
+                            <strong>${e.title || "Événement"}</strong>
+                            <div class="small muted">${clientName(e.client_id)} · ${e.lieu || ""}</div>
+                          </td>
+                          <td>${e.date_evenement || ""}</td>
+                          <td>${e.nb_personnes || 0}</td>
+                          <td>${menu?.nom || "-"}</td>
+                        </tr>
+                      `;
+                    }).join("")
+                  : `<tr><td colspan="4" class="empty">Aucun événement.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>Créer un événement</h3>
+            <div>
+              <label>Titre</label>
+              <input id="evt_title">
+            </div>
+
+            <div class="form-grid" style="margin-top:12px">
+              <div>
+                <label>Client</label>
+                <input id="evt_client">
+              </div>
+              <div>
+                <label>Date</label>
+                <input id="evt_date" type="date" value="2026-06-20">
+              </div>
+            </div>
+
+            <div class="form-grid" style="margin-top:12px">
+              <div>
+                <label>Lieu</label>
+                <input id="evt_lieu">
+              </div>
+              <div>
+                <label>Convives</label>
+                <input id="evt_nb" type="number" value="50">
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Menu</label>
+              <select id="evt_menu">
+                <option value="">Choisir</option>
+                ${state.menus.map(m => `<option value="${m.id}">${m.nom}</option>`).join("")}
+              </select>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>Statut</label>
+              <input id="evt_statut" value="Préparation">
+            </div>
+
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addEvent()">Créer l’événement</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProduction(){
+      return `
+        ${renderTopbar("Production", "Calcul automatique des quantités par événement")}
+        <div class="grid">
+          ${
+            state.prestations.length
+            ? state.prestations.map(event => {
+                const prod = eventProduction(event);
                 return `
-                  <tr>
-                    <td><strong>${e.title || 'Événement'}</strong><div class="small muted">${clientName(e.client_id)} · ${e.lieu || ''}</div></td>
-                    <td>${e.date_evenement || ''}</td>
-                    <td>${e.nb_personnes || 0}</td>
-                    <td>${menu?.nom || '-'}</td>
-                  </tr>
+                  <div class="card">
+                    <h3>${event.title || "Événement"}</h3>
+                    <div class="sub">${event.date_evenement || ""} · ${event.nb_personnes || 0} convives · ${event.lieu || ""}</div>
+                    <div class="grid two" style="margin-top:16px">
+                      <div>
+                        <h3 style="font-size:18px">Quantités de production</h3>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Recette</th>
+                              <th>Portions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${
+                              prod.recipeNeeds.length
+                              ? prod.recipeNeeds.map(r => `
+                                  <tr>
+                                    <td>${r.recipe.nom}</td>
+                                    <td>${fmt(r.portions, 0)}</td>
+                                  </tr>
+                                `).join("")
+                              : `<tr><td colspan="2" class="empty">Aucune recette liée.</td></tr>`
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <div>
+                        <h3 style="font-size:18px">Besoins matières</h3>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Ingrédient</th>
+                              <th>Besoin</th>
+                              <th>À acheter</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${
+                              prod.ingredientNeeds.length
+                              ? prod.ingredientNeeds.map(row => `
+                                  <tr>
+                                    <td>${row.ingredient.nom}</td>
+                                    <td>${fmt(row.needed)} ${row.ingredient.unite || ""}</td>
+                                    <td>${row.toBuy > 0 ? `${fmt(row.toBuy)} ${row.ingredient.unite || ""}` : "OK"}</td>
+                                  </tr>
+                                `).join("")
+                              : `<tr><td colspan="3" class="empty">Aucun besoin calculé.</td></tr>`
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 `;
-              }).join('') || `<tr><td colspan="4" class="empty">Aucun événement.</td></tr>`}
-            </tbody>
-          </table>
+              }).join("")
+            : `<div class="card"><div class="empty">Aucun événement.</div></div>`
+          }
         </div>
+      `;
+    }
 
+    function renderShopping(){
+      const shopping = globalShopping();
+      return `
+        ${renderTopbar("Courses", "Liste de courses automatique agrégée")}
         <div class="card">
-          <h3>Créer un événement</h3>
-          <div>
-            <label>Titre</label>
-            <input id="evt_title" />
-          </div>
-          <div class="form-grid" style="margin-top:12px">
-            <div>
-              <label>Client</label>
-              <input id="evt_client" />
-            </div>
-            <div>
-              <label>Date</label>
-              <input id="evt_date" type="date" value="2026-06-20" />
-            </div>
-          </div>
-          <div class="form-grid" style="margin-top:12px">
-            <div>
-              <label>Lieu</label>
-              <input id="evt_lieu" />
-            </div>
-            <div>
-              <label>Convives</label>
-              <input id="evt_nb" type="number" value="50" />
-            </div>
-          </div>
-          <div style="margin-top:12px">
-            <label>Menu</label>
-            <select id="evt_menu">
-              <option value="">Choisir</option>
-              ${state.menus.map(m=>`<option value="${m.id}">${m.nom}</option>`).join('')}
-            </select>
-          </div>
-          <div style="margin-top:12px">
-            <label>Statut</label>
-            <input id="evt_statut" value="Préparation" />
-          </div>
-          <div style="margin-top:14px">
-            <button class="btn" onclick="addEvent()">Créer l’événement</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderProduction(){
-    return `
-      <div class="topbar"><div><h2>Production</h2><p>Calcul automatique par événement</p></div></div>
-      <div class="grid">
-        ${state.prestations.map(event=>{
-          const prod = eventProduction(event);
-          return `
-            <div class="card">
-              <h3>${event.title || 'Événement'}</h3>
-              <div class="sub">${event.date_evenement || ''} · ${event.nb_personnes || 0} convives · ${event.lieu || ''}</div>
-              <div class="grid two" style="margin-top:16px">
-                <div>
-                  <h3 style="font-size:16px">Quantités de production</h3>
-                  <table>
-                    <thead><tr><th>Recette</th><th>Portions</th></tr></thead>
-                    <tbody>
-                      ${prod.recipeNeeds.map(r=>`
-                        <tr>
-                          <td>${r.recipe.nom}</td>
-                          <td>${fmt(r.portions,0)}</td>
-                        </tr>
-                      `).join('') || `<tr><td colspan="2" class="empty">Aucune recette liée.</td></tr>`}
-                    </tbody>
-                  </table>
-                </div>
-                <div>
-                  <h3 style="font-size:16px">Besoins matières</h3>
-                  <table>
-                    <thead><tr><th>Ingrédient</th><th>Besoin</th><th>À acheter</th></tr></thead>
-                    <tbody>
-                      ${prod.ingredientNeeds.map(row=>`
-                        <tr>
-                          <td>${row.ingredient.nom}</td>
-                          <td>${fmt(row.needed)} ${row.ingredient.unite || ''}</td>
-                          <td>${row.toBuy > 0 ? fmt(row.toBuy) + ' ' + (row.ingredient.unite || '') : 'OK'}</td>
-                        </tr>
-                      `).join('') || `<tr><td colspan="3" class="empty">Aucun besoin.</td></tr>`}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('') || `<div class="card"><div class="empty">Aucun événement.</div></div>`}
-      </div>
-    `;
-  }
-
-  function renderShopping(){
-    const shopping = globalShopping();
-    return `
-      <div class="topbar"><div><h2>Courses</h2><p>Liste de courses automatique</p></div></div>
-      <div class="card">
-        <table>
-          <thead><tr><th>Ingrédient</th><th>Fournisseur</th><th>Besoin total</th><th>Stock</th><th>À acheter</th></tr></thead>
-          <tbody>
-            ${shopping.map(row=>`
-              <tr>
-                <td>${row.ingredient.nom}</td>
-                <td>${row.ingredient.fournisseur || '-'}</td>
-                <td>${fmt(row.needed)} ${row.ingredient.unite || ''}</td>
-                <td>${fmt(row.ingredient.stock)} ${row.ingredient.unite || ''}</td>
-                <td>${row.toBuy > 0 ? fmt(row.toBuy) + ' ' + (row.ingredient.unite || '') : 'OK'}</td>
-              </tr>
-            `).join('') || `<tr><td colspan="5" class="empty">Aucun besoin calculé.</td></tr>`}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
-
-  function renderSuppliers(){
-    return `
-      <div class="topbar"><div><h2>Fournisseurs</h2><p>Base fournisseurs</p></div></div>
-      <div class="grid two">
-        <div class="card">
-          <h3>Fournisseurs</h3>
+          <h3>Liste de courses</h3>
           <table>
-            <thead><tr><th>Nom</th><th>Contact</th><th>Téléphone</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Ingrédient</th>
+                <th>Fournisseur</th>
+                <th>Besoin total</th>
+                <th>Stock</th>
+                <th>À acheter</th>
+              </tr>
+            </thead>
             <tbody>
-              ${state.fournisseurs.map(f=>`
-                <tr>
-                  <td>${f.nom}</td>
-                  <td>${f.contact || '-'}</td>
-                  <td>${f.telephone || '-'}</td>
-                </tr>
-              `).join('') || `<tr><td colspan="3" class="empty">Aucun fournisseur.</td></tr>`}
+              ${
+                shopping.length
+                ? shopping.map(row => `
+                    <tr>
+                      <td>${row.ingredient.nom}</td>
+                      <td>${row.supplier}</td>
+                      <td>${fmt(row.needed)} ${row.ingredient.unite || ""}</td>
+                      <td>${fmt(row.ingredient.stock)} ${row.ingredient.unite || ""}</td>
+                      <td>${row.toBuy > 0 ? `${fmt(row.toBuy)} ${row.ingredient.unite || ""}` : "OK"}</td>
+                    </tr>
+                  `).join("")
+                : `<tr><td colspan="5" class="empty">Aucun besoin calculé.</td></tr>`
+              }
             </tbody>
           </table>
         </div>
+      `;
+    }
 
-        <div class="card">
-          <h3>Ajouter un fournisseur</h3>
-          <div><label>Nom</label><input id="sup_nom" /></div>
-          <div style="margin-top:12px"><label>Contact</label><input id="sup_contact" /></div>
-          <div style="margin-top:12px"><label>Téléphone</label><input id="sup_tel" /></div>
-          <div style="margin-top:14px"><button class="btn" onclick="addSupplier()">Ajouter</button></div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderLabels(){
-    return `
-      <div class="topbar"><div><h2>Étiquettes</h2><p>Exemple d’étiquettes traiteur</p></div></div>
-      <div class="card">
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
-          ${state.recettes.map(r=>{
-            const cost = recipeCost(r);
-            return `
-              <div class="alert">
-                <strong>${r.nom}</strong><br>
-                <span class="small muted">MSC Traiteur</span><br>
-                <span class="small">Lot : ${String(r.id).toUpperCase()}</span><br>
-                <span class="small">DLC : à calculer</span><br>
-                <span class="small muted">Coût portion : ${euro(cost.unit)}</span><br>
-                <span class="small muted">Allergènes : ${cost.allergens.join(', ') || 'Aucun'}</span>
-              </div>
-            `;
-          }).join('') || `<div class="empty">Aucune recette.</div>`}
-        </div>
-      </div>
-    `;
-  }
-
-  function renderDdpp(){
-    return `
-      <div class="topbar"><div><h2>DDPP</h2><p>Fiches techniques</p></div></div>
-      <div class="card">
-        <table>
-          <thead><tr><th>Recette</th><th>Procédé</th><th>Rendement</th><th>Allergènes</th></tr></thead>
-          <tbody>
-            ${state.recettes.map(r=>{
-              const cost = recipeCost(r);
-              return `
+    function renderSuppliers(){
+      return `
+        ${renderTopbar("Fournisseurs", "Base fournisseurs et contacts")}
+        <div class="grid two">
+          <div class="card">
+            <h3>Fournisseurs</h3>
+            <table>
+              <thead>
                 <tr>
-                  <td>${r.nom}</td>
-                  <td>${r.description || ''}</td>
-                  <td>${r.portions || 0}</td>
-                  <td>${cost.allergens.join(', ') || 'Aucun'}</td>
+                  <th>Nom</th>
+                  <th>Contact</th>
+                  <th>Téléphone</th>
                 </tr>
-              `;
-            }).join('') || `<tr><td colspan="4" class="empty">Aucune recette.</td></tr>`}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
+              </thead>
+              <tbody>
+                ${
+                  state.fournisseurs.length
+                  ? state.fournisseurs.map(f => `
+                      <tr>
+                        <td>${f.nom}</td>
+                        <td>${f.contact || "-"}</td>
+                        <td>${f.telephone || "-"}</td>
+                      </tr>
+                    `).join("")
+                  : `<tr><td colspan="3" class="empty">Aucun fournisseur.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
 
-  function render(){
-    const view = document.getElementById('view');
-    if(!view) return;
-    refreshNav();
+          <div class="card">
+            <h3>Ajouter un fournisseur</h3>
+            <div>
+              <label>Nom</label>
+              <input id="sup_nom">
+            </div>
+            <div style="margin-top:12px">
+              <label>Contact</label>
+              <input id="sup_contact">
+            </div>
+            <div style="margin-top:12px">
+              <label>Téléphone</label>
+              <input id="sup_tel">
+            </div>
+            <div style="margin-top:14px">
+              <button class="btn" onclick="addSupplier()">Ajouter</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-    if(state.tab === 'dashboard') view.innerHTML = renderDashboard();
-    if(state.tab === 'ingredients') view.innerHTML = renderIngredients();
-    if(state.tab === 'recipes') {
-      view.innerHTML = renderRecipes();
+    function renderLabels(){
+      return `
+        ${renderTopbar("Étiquettes", "Étiquettes produit traiteur")}
+        <div class="card">
+          <h3>Étiquettes produits</h3>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:10px;">
+            ${
+              state.recettes.length
+              ? state.recettes.map(r => {
+                  const c = recipeCost(r);
+                  return `
+                    <div class="alert-box">
+                      <strong>${r.nom}</strong><br>
+                      <span class="small muted">MSC Traiteur</span><br>
+                      <span class="small">Lot : ${String(r.id).toUpperCase()}</span><br>
+                      <span class="small">DLC : à calculer</span><br>
+                      <span class="small muted">Coût portion : ${euro(c.unit)}</span><br>
+                      <span class="small muted">Allergènes : ${c.allergens.join(", ") || "Aucun"}</span>
+                    </div>
+                  `;
+                }).join("")
+              : `<div class="empty">Aucune recette.</div>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDdpp(){
+      return `
+        ${renderTopbar("DDPP", "Fiches techniques et allergènes")}
+        <div class="card">
+          <h3>Fiches DDPP</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Recette</th>
+                <th>Procédé</th>
+                <th>Rendement</th>
+                <th>Allergènes</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                state.recettes.length
+                ? state.recettes.map(r => {
+                    const c = recipeCost(r);
+                    return `
+                      <tr>
+                        <td>${r.nom}</td>
+                        <td>${r.description || ""}</td>
+                        <td>${r.portions || 0}</td>
+                        <td>${c.allergens.join(", ") || "Aucun"}</td>
+                      </tr>
+                    `;
+                  }).join("")
+                : `<tr><td colspan="4" class="empty">Aucune recette.</td></tr>`
+              }
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderStatusNote(){
+      if(state.error){
+        return `<div class="top-note error-note">${state.error}</div>`;
+      }
+      if(state.syncMessage){
+        return `<div class="top-note success-note">${state.syncMessage}</div>`;
+      }
+      return "";
+    }
+
+    function render(){
+      const view = document.getElementById("view");
+      if(!view) return;
+
+      refreshNav();
+
+      let html = renderStatusNote();
+
+      if(state.tab === "dashboard") html += renderDashboard();
+      if(state.tab === "ingredients") html += renderIngredients();
+      if(state.tab === "recipes") html += renderRecipes();
+      if(state.tab === "menus") html += renderMenus();
+      if(state.tab === "events") html += renderEvents();
+      if(state.tab === "production") html += renderProduction();
+      if(state.tab === "shopping") html += renderShopping();
+      if(state.tab === "suppliers") html += renderSuppliers();
+      if(state.tab === "labels") html += renderLabels();
+      if(state.tab === "ddpp") html += renderDdpp();
+
+      view.innerHTML = html;
+
+      if(state.tab === "recipes"){
+        renderRecipeLines();
+      }
+    }
+
+    function addRecipeLineForm(){
+      const firstIngredient = state.ingredients[0];
+      forms.recetteLignes.push({
+        ingredient_id: firstIngredient ? String(firstIngredient.id) : "",
+        quantite: 0
+      });
       renderRecipeLines();
     }
-    if(state.tab === 'menus') view.innerHTML = renderMenus();
-    if(state.tab === 'events') view.innerHTML = renderEvents();
-    if(state.tab === 'production') view.innerHTML = renderProduction();
-    if(state.tab === 'shopping') view.innerHTML = renderShopping();
-    if(state.tab === 'suppliers') view.innerHTML = renderSuppliers();
-    if(state.tab === 'labels') view.innerHTML = renderLabels();
-    if(state.tab === 'ddpp') view.innerHTML = renderDdpp();
-  }
 
-  async function addSupplier(){
-    const nom = document.getElementById('sup_nom').value.trim();
-    const contact = document.getElementById('sup_contact').value.trim();
-    const telephone = document.getElementById('sup_tel').value.trim();
-    if(!nom) return alert('Nom fournisseur obligatoire');
-    await supabase.from(TABLES.fournisseurs).insert([{ nom, contact, telephone }]);
-    await loadAll();
-    state.tab = 'suppliers';
-    render();
-  }
-
-  async function addIngredient(){
-    const nom = document.getElementById('ing_nom').value.trim();
-    const unite = document.getElementById('ing_unite').value;
-    const stock = Number(document.getElementById('ing_stock').value || 0);
-    const min_stock = Number(document.getElementById('ing_min').value || 0);
-    const prix_unitaire = Number(document.getElementById('ing_prix').value || 0);
-    const fournisseur = document.getElementById('ing_fournisseur').value;
-    const allergene = document.getElementById('ing_allergene').value.trim();
-    if(!nom) return alert('Nom ingrédient obligatoire');
-
-    await supabase.from(TABLES.ingredients).insert([{
-      nom, unite, stock, min_stock, prix_unitaire, fournisseur, allergene
-    }]);
-    await loadAll();
-    state.tab = 'ingredients';
-    render();
-  }
-
-  function addRecipeLineForm(){
-    newData.recetteLignes.push({ ingredient_id: String(state.ingredients[0]?.id || ''), quantite: 0 });
-    renderRecipeLines();
-  }
-
-  function updateRecipeLine(index, field, value){
-    if(field === 'quantite') newData.recetteLignes[index][field] = Number(value);
-    else newData.recetteLignes[index][field] = value;
-  }
-
-  function removeRecipeLine(index){
-    newData.recetteLignes.splice(index,1);
-    renderRecipeLines();
-  }
-
-  async function addRecipe(){
-    const nom = document.getElementById('rec_nom').value.trim();
-    const categorie = document.getElementById('rec_cat').value.trim();
-    const portions = Number(document.getElementById('rec_portions').value || 0);
-    const description = document.getElementById('rec_desc').value.trim();
-    if(!nom) return alert('Nom recette obligatoire');
-
-    const ins = await supabase.from(TABLES.recettes).insert([{ nom, categorie, portions, description }]).select().single();
-    if(ins.error) return alert(ins.error.message);
-
-    const recetteId = ins.data.id;
-    const lines = newData.recetteLignes
-      .filter(l => l.ingredient_id && Number(l.quantite) > 0)
-      .map(l => ({ recette_id: recetteId, ingredient_id: l.ingredient_id, quantite: Number(l.quantite) }));
-
-    if(lines.length){
-      const res = await supabase.from(TABLES.recetteIngredients).insert(lines);
-      if(res.error) return alert(res.error.message);
+    function updateRecipeLine(index, field, value){
+      if(field === "quantite"){
+        forms.recetteLignes[index][field] = Number(value);
+      }else{
+        forms.recetteLignes[index][field] = value;
+      }
     }
 
-    newData.recetteLignes = [];
-    await loadAll();
-    state.tab = 'recipes';
-    render();
-  }
-
-  async function addMenu(){
-    const nom = document.getElementById('menu_nom').value.trim();
-    const recipeId = document.getElementById('menu_recipe').value;
-    const prix = Number(document.getElementById('menu_prix').value || 0);
-    if(!nom || !recipeId) return alert('Nom menu et recette obligatoires');
-
-    const recipe = byId(state.recettes, recipeId);
-    const res = await supabase.from(TABLES.menus).insert([{
-      nom,
-      description: recipe ? recipe.nom : '',
-      prix
-    }]);
-    if(res.error) return alert(res.error.message);
-
-    await loadAll();
-    state.tab = 'menus';
-    render();
-  }
-
-  async function addEvent(){
-    const title = document.getElementById('evt_title').value.trim();
-    const clientLabel = document.getElementById('evt_client').value.trim();
-    const date_evenement = document.getElementById('evt_date').value;
-    const lieu = document.getElementById('evt_lieu').value.trim();
-    const nb_personnes = Number(document.getElementById('evt_nb').value || 0);
-    const menuId = document.getElementById('evt_menu').value;
-    const statut = document.getElementById('evt_statut').value.trim() || 'Préparation';
-
-    if(!date_evenement || !nb_personnes || !menuId) return alert('Date, convives et menu obligatoires');
-
-    let client_id = null;
-    if(clientLabel){
-      const clientInsert = await supabase.from(TABLES.clients).insert([{ nom: clientLabel }]).select().single();
-      if(clientInsert.error) return alert(clientInsert.error.message);
-      client_id = clientInsert.data.id;
+    function removeRecipeLine(index){
+      forms.recetteLignes.splice(index, 1);
+      renderRecipeLines();
     }
 
-    const eventInsert = await supabase.from(TABLES.prestations).insert([{
-      client_id,
-      date_evenement,
-      lieu,
-      nb_personnes,
-      statut,
-      title
-    }]).select().single();
+    async function addSupplier(){
+      const nom = document.getElementById("sup_nom").value.trim();
+      const contact = document.getElementById("sup_contact").value.trim();
+      const telephone = document.getElementById("sup_tel").value.trim();
 
-    if(eventInsert.error) return alert(eventInsert.error.message);
+      if(!nom){
+        alert("Nom fournisseur obligatoire");
+        return;
+      }
 
-    const link = await supabase.from(TABLES.prestationsMenus).insert([{
-      prestation_id: eventInsert.data.id,
-      menu_id: menuId
-    }]);
+      const res = await supabase.from(TABLES.fournisseurs).insert([{ nom, contact, telephone }]);
+      if(res.error){
+        alert(res.error.message);
+        return;
+      }
 
-    if(link.error) return alert(link.error.message);
-
-    await loadAll();
-    state.tab = 'events';
-    render();
-  }
-
-  document.querySelectorAll('.nav button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      state.tab = btn.dataset.tab;
+      await loadAll();
+      state.tab = "suppliers";
       render();
+    }
+
+    async function addIngredient(){
+      const nom = document.getElementById("ing_nom").value.trim();
+      const unite = document.getElementById("ing_unite").value;
+      const stock = Number(document.getElementById("ing_stock").value || 0);
+      const min_stock = Number(document.getElementById("ing_min_stock").value || 0);
+      const prix_unitaire = Number(document.getElementById("ing_prix").value || 0);
+      const fournisseur = document.getElementById("ing_fournisseur").value.trim();
+      const allergene = document.getElementById("ing_allergene").value.trim();
+
+      if(!nom){
+        alert("Nom ingrédient obligatoire");
+        return;
+      }
+
+      const res = await supabase.from(TABLES.ingredients).insert([{
+        nom,
+        unite,
+        stock,
+        min_stock,
+        prix_unitaire,
+        fournisseur,
+        allergene
+      }]);
+
+      if(res.error){
+        alert(res.error.message);
+        return;
+      }
+
+      await loadAll();
+      state.tab = "ingredients";
+      render();
+    }
+
+    async function addRecipe(){
+      const nom = document.getElementById("rec_nom").value.trim();
+      const categorie = document.getElementById("rec_categorie").value.trim();
+      const portions = Number(document.getElementById("rec_portions").value || 0);
+      const description = document.getElementById("rec_description").value.trim();
+
+      if(!nom){
+        alert("Nom recette obligatoire");
+        return;
+      }
+
+      const recInsert = await supabase.from(TABLES.recettes)
+        .insert([{ nom, categorie, portions, description }])
+        .select()
+        .single();
+
+      if(recInsert.error){
+        alert(recInsert.error.message);
+        return;
+      }
+
+      const recetteId = recInsert.data.id;
+      const lines = forms.recetteLignes
+        .filter(l => l.ingredient_id && Number(l.quantite) > 0)
+        .map(l => ({
+          recette_id: recetteId,
+          ingredient_id: l.ingredient_id,
+          quantite: Number(l.quantite)
+        }));
+
+      if(lines.length){
+        const lineInsert = await supabase.from(TABLES.recetteIngredients).insert(lines);
+        if(lineInsert.error){
+          alert(lineInsert.error.message);
+          return;
+        }
+      }
+
+      forms.recetteLignes = [];
+      await loadAll();
+      state.tab = "recipes";
+      render();
+    }
+
+    async function addMenu(){
+      const nom = document.getElementById("menu_nom").value.trim();
+      const recipeId = document.getElementById("menu_recipe").value;
+      const prix = Number(document.getElementById("menu_prix").value || 0);
+
+      if(!nom || !recipeId){
+        alert("Nom menu et recette obligatoires");
+        return;
+      }
+
+      const recipe = byId(state.recettes, recipeId);
+
+      const res = await supabase.from(TABLES.menus).insert([{
+        nom,
+        description: recipe ? recipe.nom : "",
+        prix
+      }]);
+
+      if(res.error){
+        alert(res.error.message);
+        return;
+      }
+
+      await loadAll();
+      state.tab = "menus";
+      render();
+    }
+
+    async function addEvent(){
+      const title = document.getElementById("evt_title").value.trim();
+      const clientLabel = document.getElementById("evt_client").value.trim();
+      const date_evenement = document.getElementById("evt_date").value;
+      const lieu = document.getElementById("evt_lieu").value.trim();
+      const nb_personnes = Number(document.getElementById("evt_nb").value || 0);
+      const menuId = document.getElementById("evt_menu").value;
+      const statut = document.getElementById("evt_statut").value.trim() || "Préparation";
+
+      if(!date_evenement || !nb_personnes || !menuId){
+        alert("Date, convives et menu obligatoires");
+        return;
+      }
+
+      let client_id = null;
+
+      if(clientLabel){
+        const clientInsert = await supabase.from(TABLES.clients)
+          .insert([{ nom: clientLabel }])
+          .select()
+          .single();
+
+        if(clientInsert.error){
+          alert(clientInsert.error.message);
+          return;
+        }
+
+        client_id = clientInsert.data.id;
+      }
+
+      const evtInsert = await supabase.from(TABLES.prestations)
+        .insert([{
+          client_id,
+          date_evenement,
+          lieu,
+          nb_personnes,
+          statut,
+          title
+        }])
+        .select()
+        .single();
+
+      if(evtInsert.error){
+        alert(evtInsert.error.message);
+        return;
+      }
+
+      const linkRes = await supabase.from(TABLES.prestationsMenus).insert([{
+        prestation_id: evtInsert.data.id,
+        menu_id: menuId
+      }]);
+
+      if(linkRes.error){
+        alert(linkRes.error.message);
+        return;
+      }
+
+      await loadAll();
+      state.tab = "events";
+      render();
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.tab = btn.dataset.tab;
+        render();
+      });
     });
-  });
 
-  window.loadAll = loadAll;
-  window.addSupplier = addSupplier;
-  window.addIngredient = addIngredient;
-  window.addRecipeLineForm = addRecipeLineForm;
-  window.updateRecipeLine = updateRecipeLine;
-  window.removeRecipeLine = removeRecipeLine;
-  window.addRecipe = addRecipe;
-  window.addMenu = addMenu;
-  window.addEvent = addEvent;
+    window.loadAll = loadAll;
+    window.addSupplier = addSupplier;
+    window.addIngredient = addIngredient;
+    window.addRecipeLineForm = addRecipeLineForm;
+    window.updateRecipeLine = updateRecipeLine;
+    window.removeRecipeLine = removeRecipeLine;
+    window.addRecipe = addRecipe;
+    window.addMenu = addMenu;
+    window.addEvent = addEvent;
 
-  loadAll();
-</script>
+    render();
+    loadAll();
+  </script>
 </body>
 </html>
