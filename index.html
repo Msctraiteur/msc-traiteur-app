@@ -234,17 +234,17 @@
   const SUPABASE_KEY = 'sb_publishable_sCK7Lr2Z_hZr2Evb6ASzEg_jbAqqSqk';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLES = {
-    clients: 'clients',
-    fournisseurs: 'fournisseurs',
-    ingredients: 'ingrédients',
-    recettes: 'recettes',
-    recetteIngredients: 'ingrédients de la recette',
-    menus: 'menus',
-    prestations: 'prestations',
-    prestationsMenus: 'prestations_menus',
-    listeCourses: 'liste_cours'
-  };
+  const TABLEAUX = {
+clients:'clients',
+fournisseurs:'fournisseurs',
+ingredients:'ingredients',
+recettes:'recettes',
+recetteIngredients:'recette_ingredients',
+menus:'menus',
+prestations:'prestations',
+prestationsMenus:'prestations_menus',
+listeCours:'liste_cours'
+};
 
   const state = {
     tab: 'dashboard',
