@@ -1218,6 +1218,7 @@
                   <th>Nom</th>
                   <th>Contact</th>
                   <th>Téléphone</th>
+                  <th>Email</th>
                 </tr>
               </thead>
               <tbody>
@@ -1228,6 +1229,7 @@
                         <td>${f.nom}</td>
                         <td>${f.contact || "-"}</td>
                         <td>${f.telephone || "-"}</td>
+                        <td>${f.email ?? "-"}</td>
                       </tr>
                     `).join("")
                   : `<tr><td colspan="3" class="empty">Aucun fournisseur.</td></tr>`
@@ -1250,6 +1252,11 @@
               <label>Téléphone</label>
               <input id="sup_tel">
             </div>
+           <div style="margin-top:12px">
+              <label>Email</label>
+              <input id="email">
+            </div>
+            
             <div style="margin-top:14px">
               <button class="btn" onclick="addSupplier()">Ajouter</button>
             </div>
