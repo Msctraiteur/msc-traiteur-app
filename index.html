@@ -504,7 +504,7 @@
     }
 
     async function safeSelect(tableName){
-      const result = await supabase.from(tableName).select("*").order("id", { ascending: true });
+      const result = await supabaseClient.from(tableName).select("*").order("id", { ascending: true });
       if(result.error) throw new Error(`Table "${tableName}" : ${result.error.message}`);
       return result.data || [];
     }
@@ -1389,7 +1389,7 @@
         return;
       }
 
-      const res = await supabase.from(TABLES.fournisseurs).insert([{ nom, contact, telephone }]);
+      const res = await supabaseClient.from(TABLES.fournisseurs).insert([{ nom, contact, telephone }]);
       if(res.error){
         alert(res.error.message);
         return;
@@ -1414,7 +1414,7 @@
         return;
       }
 
-      const res = await supabase.from(TABLES.ingredients).insert([{
+      const res = await supabaseClient.from(TABLES.ingredients).insert([{
         nom,
         unite,
         stock,
@@ -1445,7 +1445,7 @@
         return;
       }
 
-      const recInsert = await supabase.from(TABLES.recettes)
+      const recInsert = await supabaseClient.from(TABLES.recettes)
         .insert([{ nom, categorie, portions, description }])
         .select()
         .single();
@@ -1465,7 +1465,7 @@
         }));
 
       if(lines.length){
-        const lineInsert = await supabase.from(TABLES.recetteIngredients).insert(lines);
+        const lineInsert = await supabaseClient.from(TABLES.recetteIngredients).insert(lines);
         if(lineInsert.error){
           alert(lineInsert.error.message);
           return;
@@ -1490,7 +1490,7 @@
 
       const recipe = byId(state.recettes, recipeId);
 
-      const res = await supabase.from(TABLES.menus).insert([{
+      const res = await supabaseClient.from(TABLES.menus).insert([{
         nom,
         description: recipe ? recipe.nom : "",
         prix
@@ -1523,7 +1523,7 @@
       let client_id = null;
 
       if(clientLabel){
-        const clientInsert = await supabase.from(TABLES.clients)
+        const clientInsert = await supabaseClient.from(TABLES.clients)
           .insert([{ nom: clientLabel }])
           .select()
           .single();
@@ -1536,7 +1536,7 @@
         client_id = clientInsert.data.id;
       }
 
-      const evtInsert = await supabase.from(TABLES.prestations)
+      const evtInsert = await supabaseClient.from(TABLES.prestations)
         .insert([{
           client_id,
           date_evenement,
@@ -1553,7 +1553,7 @@
         return;
       }
 
-      const linkRes = await supabase.from(TABLES.prestationsMenus).insert([{
+      const linkRes = await supabaseClient.from(TABLES.prestationsMenus).insert([{
         prestation_id: evtInsert.data.id,
         menu_id: menuId
       }]);
